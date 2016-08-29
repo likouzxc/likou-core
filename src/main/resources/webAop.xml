@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+    <bean id="manyDataSourceAspect" class="com.likou.core.aop.DataSourceAspect" />
+    <aop:config>
+        <aop:aspect id="daoAsp" ref="manyDataSourceAspect">
+            <aop:pointcut id="daoAsp_tx" expression="execution(* com..dao.master..*.*(..))"/>
+            <aop:before pointcut-ref="daoAsp_tx" method="before"/>
+            <aop:around pointcut-ref="daoAsp_tx" method="around"/>
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="serviceAspect" class="com.likou.core.aop.ServiceAspect" />
+    <aop:config>
+        <aop:aspect id="serviceAsp" ref="serviceAspect">
+            <aop:pointcut id="serviceAsp_tx" expression="execution(* com..service..*.*(..))"/>
+            <aop:around pointcut-ref="serviceAsp_tx" method="around"/>
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="dubboAspect" class="com.likou.core.aop.ServiceAspect" />
+    <aop:config>
+        <aop:aspect id="dubboAsp" ref="dubboAspect">
+            <aop:pointcut id="dubboAsp_tx" expression="execution(* com..provider..*.*(..))"/>
+            <aop:around pointcut-ref="dubboAsp_tx" method="around"/>
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="webAspect" class="com.likou.core.aop.WebAspect" />
+    <aop:config>
+        <aop:aspect id="webAsp" ref="webAspect">
+            <aop:pointcut id="webAsp_tx" expression="execution(* com..web.controller..*.*(..))"/>
+            <aop:around pointcut-ref="webAsp_tx" method="around"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>

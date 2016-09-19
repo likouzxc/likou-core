@@ -16,9 +16,9 @@ public class Contents {
      */
     private static String resourceHost;
     /**
-     * 登录host地址
+     * cookie地址
      */
-    private static String loginHost;
+    private static String cookieHost;
     /**
      * 登录地址
      */
@@ -53,12 +53,12 @@ public class Contents {
         Contents.requestFrom = requestFrom;
     }
 
-    public static String getLoginHost() {
-        return loginHost;
+    public static String getCookieHost() {
+        return cookieHost;
     }
 
-    public static void setLoginHost(String loginHost) {
-        Contents.loginHost = loginHost;
+    public static void setCookieHost(String cookieHost) {
+        Contents.cookieHost = cookieHost;
     }
 
     public static String getLoginURL() {

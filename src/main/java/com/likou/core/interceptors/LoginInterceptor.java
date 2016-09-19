@@ -50,17 +50,17 @@ public class LoginInterceptor implements HandlerInterceptor {
             callParam.add("sessionID",sessionID);
             callParam.add("uuid",uuid);
             if(userProvider.isLogin(callParam).isSuccess()){
-                CookieUtils.addCookie(httpServletResponse, "/", "i", i);
-                CookieUtils.addCookie(httpServletResponse, "/", "t", t);
-                CookieUtils.addCookie(httpServletResponse, "/", "sessionID", sessionID);
-                CookieUtils.addCookie(httpServletResponse, "/", "uuid", uuid);
+                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", "i", i);
+                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", "t", t);
+                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", "sessionID", sessionID);
+                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", "uuid", uuid);
                 return true;
             }else{
                 httpServletResponse.sendRedirect(Contents.getLoginURL());
-                CookieUtils.delCookie(httpServletRequest,httpServletResponse , "/", "i");
-                CookieUtils.delCookie(httpServletRequest,httpServletResponse ,"/", "t");
-                CookieUtils.delCookie(httpServletRequest,httpServletResponse , "/", "sessionID");
-                CookieUtils.delCookie(httpServletRequest,httpServletResponse, "/", "uuid");
+                CookieUtils.delCookie(httpServletRequest,httpServletResponse ,Contents.getCookieHost(), "/", "i");
+                CookieUtils.delCookie(httpServletRequest,httpServletResponse ,Contents.getCookieHost(),"/", "t");
+                CookieUtils.delCookie(httpServletRequest,httpServletResponse ,Contents.getCookieHost(), "/", "sessionID");
+                CookieUtils.delCookie(httpServletRequest,httpServletResponse ,Contents.getCookieHost(), "/", "uuid");
                 return false;
             }
         }

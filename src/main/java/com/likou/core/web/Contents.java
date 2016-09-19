@@ -15,6 +15,14 @@ public class Contents {
      * 资源host地址
      */
     private static String resourceHost;
+    /**
+     * 登录host地址
+     */
+    private static String loginHost;
+    /**
+     * 登录地址
+     */
+    private static String loginURL;
 
     /**
      * 请求来源
@@ -43,5 +51,21 @@ public class Contents {
 
     public static void setRequestFrom(String requestFrom) {
         Contents.requestFrom = requestFrom;
+    }
+
+    public static String getLoginHost() {
+        return loginHost;
+    }
+
+    public static void setLoginHost(String loginHost) {
+        Contents.loginHost = loginHost;
+    }
+
+    public static String getLoginURL() {
+        return loginURL;
+    }
+
+    public static void setLoginURL(String loginURL) {
+        Contents.loginURL = loginURL;
     }
 }

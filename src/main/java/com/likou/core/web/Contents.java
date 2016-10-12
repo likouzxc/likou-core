@@ -7,6 +7,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class Contents {
+
+    public static final String SESSIONID = "SessionID";
+    public static final String I = "i";
+    public static final String T = "t";
+    public static final String UUID = "uuid";
     /**
      * 主站host地址
      */

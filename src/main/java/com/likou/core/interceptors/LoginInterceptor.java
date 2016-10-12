@@ -34,10 +34,10 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         HttpSession session = httpServletRequest.getSession(true);
 
-        String t = CookieUtils.getCookieByName(httpServletRequest,"t");
-        String i = CookieUtils.getCookieByName(httpServletRequest,"i");
-        String sessionID = CookieUtils.getCookieByName(httpServletRequest,"sessionID");
-        String uuid = CookieUtils.getCookieByName(httpServletRequest,"uuid");
+        String t = CookieUtils.getCookieByName(httpServletRequest,Contents.T);
+        String i = CookieUtils.getCookieByName(httpServletRequest,Contents.I);
+        String sessionID = CookieUtils.getCookieByName(httpServletRequest,Contents.SESSIONID);
+        String uuid = CookieUtils.getCookieByName(httpServletRequest,Contents.UUID);
 
         if(StringUtils.isBlank(t) || StringUtils.isBlank(sessionID) || StringUtils.isBlank(i) || StringUtils.isBlank(uuid)){
             httpServletResponse.sendRedirect(Contents.getLoginURL());
@@ -45,22 +45,22 @@ public class LoginInterceptor implements HandlerInterceptor {
         }else{
             UserProvider userProvider = serviceFactory.getDubboService(UserProvider.class);
             CallParam callParam = new CallParam(IDGen.get32ID(),"system");
-            callParam.add("t",t);
-            callParam.add("i",i);
-            callParam.add("sessionID",sessionID);
-            callParam.add("uuid",uuid);
+            callParam.add(Contents.T,t);
+            callParam.add(Contents.I,i);
+            callParam.add(Contents.SESSIONID,sessionID);
+            callParam.add(Contents.UUID,uuid);
             if(userProvider.isLogin(callParam).isSuccess()){
-                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", "i", i);
-                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", "t", t);
-                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", "sessionID", sessionID);
-                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", "uuid", uuid);
+                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", Contents.I, i);
+                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", Contents.T, t);
+                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", Contents.SESSIONID, sessionID);
+                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", Contents.UUID, uuid);
                 return true;
             }else{
                 httpServletResponse.sendRedirect(Contents.getLoginURL());
-                CookieUtils.delCookie(httpServletRequest,httpServletResponse ,Contents.getCookieHost(), "/", "i");
-                CookieUtils.delCookie(httpServletRequest,httpServletResponse ,Contents.getCookieHost(),"/", "t");
-                CookieUtils.delCookie(httpServletRequest,httpServletResponse ,Contents.getCookieHost(), "/", "sessionID");
-                CookieUtils.delCookie(httpServletRequest,httpServletResponse ,Contents.getCookieHost(), "/", "uuid");
+                CookieUtils.delCookie(httpServletRequest,httpServletResponse ,Contents.getCookieHost(), "/", Contents.I);
+                CookieUtils.delCookie(httpServletRequest,httpServletResponse ,Contents.getCookieHost(),"/", Contents.T);
+                CookieUtils.delCookie(httpServletRequest,httpServletResponse ,Contents.getCookieHost(), "/", Contents.SESSIONID);
+                CookieUtils.delCookie(httpServletRequest,httpServletResponse ,Contents.getCookieHost(), "/", Contents.UUID);
                 return false;
             }
         }

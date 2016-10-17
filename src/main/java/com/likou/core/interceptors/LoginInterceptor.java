@@ -2,6 +2,7 @@ package com.likou.core.interceptors;
 
 import com.likou.common.character.IDGen;
 import com.likou.common.net.CookieUtils;
+import com.likou.core.bean.LoginCookieBean;
 import com.likou.core.dubbo.CallParam;
 import com.likou.core.dubbo.DubboServiceFactory;
 import com.likou.core.dubbo.UserProvider;
@@ -31,29 +32,22 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-
         HttpSession session = httpServletRequest.getSession(true);
 
-        String t = CookieUtils.getCookieByName(httpServletRequest,Contents.T);
-        String i = CookieUtils.getCookieByName(httpServletRequest,Contents.I);
-        String sessionID = CookieUtils.getCookieByName(httpServletRequest,Contents.SESSIONID);
-        String uuid = CookieUtils.getCookieByName(httpServletRequest,Contents.UUID);
-
-        if(StringUtils.isBlank(t) || StringUtils.isBlank(sessionID) || StringUtils.isBlank(i) || StringUtils.isBlank(uuid)){
+        LoginCookieBean cookieBean = new LoginCookieBean(httpServletRequest);
+        if(StringUtils.isBlank(cookieBean.getT()) || StringUtils.isBlank(cookieBean.getSessionID())
+                || StringUtils.isBlank(cookieBean.getI()) || StringUtils.isBlank(cookieBean.getUuid())){
             httpServletResponse.sendRedirect(Contents.getLoginURL());
             return false;
         }else{
             UserProvider userProvider = serviceFactory.getDubboService(UserProvider.class);
             CallParam callParam = new CallParam(IDGen.get32ID(),"system");
-            callParam.add(Contents.T,t);
-            callParam.add(Contents.I,i);
-            callParam.add(Contents.SESSIONID,sessionID);
-            callParam.add(Contents.UUID,uuid);
+            callParam.add("cookieBean",cookieBean);
             if(userProvider.isLogin(callParam).isSuccess()){
-                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", Contents.I, i);
-                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", Contents.T, t);
-                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", Contents.SESSIONID, sessionID);
-                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", Contents.UUID, uuid);
+                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", Contents.I, cookieBean.getI());
+                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", Contents.T, cookieBean.getT());
+                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", Contents.SESSIONID, cookieBean.getSessionID());
+                CookieUtils.addCookie(httpServletResponse,Contents.getCookieHost(), "/", Contents.UUID, cookieBean.getUuid());
                 return true;
             }else{
                 httpServletResponse.sendRedirect(Contents.getLoginURL());
